@@ -1,0 +1,253 @@
+{
+  "version": 2,
+  "notes": [
+    {
+      "id": "434c87e1-c8c3-4aa4-b6f5-082d769b6190",
+      "type": "theory",
+      "title": "Objective:",
+      "content": "> Numpy\n> Pandas\n> Importing and exporting data\n> Visualizing data with Matplotlib and Seaborn\n> Data Portfolio Projects\n> Machine Learning with Scikit-Learn\nAppendix Material\n> Statistics\n> SQL with Python\n> Web Scraping with Python",
+      "language": null,
+      "tags": [
+        "syllabus"
+      ],
+      "pinned": false,
+      "createdAt": "2026-06-06T14:49:18.848Z",
+      "updatedAt": "2026-06-06T14:49:18.848Z"
+    },
+    {
+      "id": "93b3ca09-d36e-4c96-a229-eb192cf0dff1",
+      "type": "theory",
+      "title": "Numpy",
+      "content": "NumPy (Numerical Python) is the foundational open-source library used for numerical and scientific computing in Python. It introduces a powerful, multi-dimensional array object called ndarray and supplies a massive collection of high-level mathematical functions to manipulate these arrays efficiently",
+      "language": null,
+      "tags": [
+        "numpy"
+      ],
+      "pinned": false,
+      "createdAt": "2026-06-06T14:50:23.772Z",
+      "updatedAt": "2026-06-06T22:07:01.121Z"
+    },
+    {
+      "id": "ba768806-f92e-4dd4-8ee6-53090093d7d4",
+      "type": "code",
+      "title": "Numpy : Creating Array",
+      "content": "import numpy as np\n\nmy_list1 = [1, 2, 3, 4]\nmy_array1 = np.array(my_list1)\nprint(my_array1)\n\nmy_list2 = [11, 22, 33, 44]\nmy_lists = [my_list1, my_list2]\nmy_array2 = np.array(my_lists)\nprint(my_array2)\nprint(my_lists)\n\nmy_zeroes_array = np.zeros(5)\nprint(my_zeroes_array)\n\nprint( np.ones([5,5]) )\n\nprint( np.empty(5) )\n\nprint( np.eye(5) )\n\nprint( np.arange(5) )\n\nprint( np.arange(5, 50, 2) )",
+      "language": "python",
+      "tags": [],
+      "pinned": false,
+      "createdAt": "2026-06-06T22:17:17.275Z",
+      "updatedAt": "2026-06-06T22:29:20.809Z"
+    },
+    {
+      "id": "2564c611-dd03-44dd-8ae3-66855c7d1425",
+      "type": "code",
+      "title": "Numpy : Using arrays and scalars",
+      "content": "import numpy as np\nfrom __future__ import divison\n5/2\n\narr1 = np.array([[1, 2, 3, 4], [8, 9, 10, 11]])\narr1*arr1\narr1 - arr1\n1 / arr1\narr1 **  3",
+      "language": "python",
+      "tags": [],
+      "pinned": false,
+      "createdAt": "2026-06-07T12:59:56.204Z",
+      "updatedAt": "2026-06-07T13:00:13.945Z"
+    },
+    {
+      "id": "6931aabf-5d33-4c1e-8de3-122527addfa7",
+      "type": "code",
+      "title": "Numpy : Indexing Arrays",
+      "content": "import numpy as np\n\narr = np.arange(0, 11)\nprint(arr)\n\nprint( arr[8] )\nprint( arr[1:5] )\nprint( arr[0:5] )\n\narr[0:5] = 100\nprint( arr )\n\narr = np.arange(0, 11)\nslice_of_arr = arr[0:6]\nprint(slice_of_arr)\n\nslice_of_arr[:] = 99\nprint( slice_of_arr )\n\narr_copy = arr.copy()\nprint( arr_copy )\n\narr_2d = np.array(( [5, 10, 15], [20, 25, 30], [35, 40, 45] ))\nprint( arr_2d )\nprint( arr_2d[1] )\nprint( arr_2d[0] )\nprint( arr_2d[1][0] )\nprint( arr_2d )\nprint ( arr_2d[:2, 1:] )\n\narr2d = np.zeros( (10, 10) ) \narr_length = arr2d.shape[1]\nprint( arr_length )\n\nfor i in range(arr_length):\n  arr2d[i] = i\n\nprint( arr2d )\nprint( arr2d[[2, 4, 6, 8]] )\nprint( arr2d[[6, 4, 2, 7]] )",
+      "language": "python",
+      "tags": [],
+      "pinned": false,
+      "createdAt": "2026-06-09T12:28:14.003Z",
+      "updatedAt": "2026-06-09T12:28:14.003Z"
+    },
+    {
+      "id": "5b63c4be-6990-448c-ad83-cc84009bf6ac",
+      "type": "code",
+      "title": "Numpy : Array Transposition",
+      "content": "import numpy as np\n\narr = np.arange(50).reshape((10, 5))\nprint( arr )\nprint( arr.T )\n\ntranposed_arr = arr.T\nprint( transposed_arr )\n\ndot_product = np.dot(arr.t, arr)\nprint( dot_product )\n\n\narr3d = np.arange(50).reshape((5, 5, 2))\nprint( arr3d )",
+      "language": "python",
+      "tags": [],
+      "pinned": false,
+      "createdAt": "2026-06-09T12:36:50.733Z",
+      "updatedAt": "2026-06-09T12:37:01.122Z"
+    },
+    {
+      "id": "ce9a84bb-2a38-44d1-afa2-7b50b15ffffe",
+      "type": "code",
+      "title": "Numpy : Universal Array Function",
+      "content": "import numpy as np\n\narr = np.arange(11)\nprint( arr )\n\nnp.sqrt(arr)\nnp.exp(err)\n\nA = np.random.randn(10)\nprint( A )\n\nB = np.random.randn(10)\nprint( B )\n\n# Binary Functions\nnp.add(A, B)\nnp.maximum(A, B)",
+      "language": "python",
+      "tags": [],
+      "pinned": false,
+      "createdAt": "2026-06-09T12:47:32.055Z",
+      "updatedAt": "2026-06-09T12:47:32.055Z"
+    },
+    {
+      "id": "0b6022cb-d13c-4a8f-88fd-d275ded3c67d",
+      "type": "short",
+      "title": "ref",
+      "content": "wesite_for_doc = 'http://docs.scipy.org/doc/numpy/reference/ufunc.html#available-ufuncs'\nimport webbrowser\nwebbrowser.open(website_for_doc)",
+      "language": null,
+      "tags": [],
+      "pinned": false,
+      "createdAt": "2026-06-09T12:47:46.653Z",
+      "updatedAt": "2026-06-09T12:47:46.653Z"
+    },
+    {
+      "id": "e8d73b63-bfab-4150-b041-b3390b92fe0b",
+      "type": "code",
+      "title": "Numpy : Array Processing",
+      "content": "import numpy as np\n\nimport matplotlib.pyplot as plt\n%matplotlib inline\n\npoints = np.arange(-5, 5, 0.01)\ndx, dy = np.meshgrid(points, points)\nprint( dx )\nprint( dy )\n\nz = ( np.sin(dx) + np.sin(dy) )\nprint( z )\n\nplt.imshow( z )\nplt.colorbar()\nplt.title( 'Plot for Sin(x)+Sin(y)' )\n\n------------------------------------------------------------------->\n\nA = np.array([1, 2, 3, 4])\nB = np.array([100, 200, 300, 400])\ncondition = np.array([True, True, False, False])\n\nanswer = [(A_val if cond else B_val) for A_val, B_val, cond in zip(A, B, condition)]\n\nprint( answer )\n\n------------------------------------------------------------------->\n\nanswer2 = np.where( condition, A, B )\nprint( answer2 )\n\n------------------------------------------------------------------->\n\nfrom numpy.random import randn\n\narr = randn(5, 5)\nprint( arr ) \narr = np.where( arr<0, 0, arr )\nprint( arr )\n\n------------------------------------------------------------------->\n\narr = np.array( [[1, 2, 3], [4, 5, 6], [7, 8, 9]] )\narr.sum()\narr.sum(0)\narr.mean()\narr.std()\narr.var()\n\nbool_arr = np.array([True, False, True])\nbool_arr.any()\nbool_arr.all()\n\n------------------------------------------------------------------->\n\narr = randn( 5 )\nprint( arr )\narr = arr.sort()\nprint( arr )\n\ncountries = np.array(['France', 'Germany', 'USA', 'Russia', 'USA', 'Maxico', 'Germany'])\nnp.unique(countries)\nnp.in1d(['France', 'USA' ,'Sweden'], countries)",
+      "language": "python",
+      "tags": [],
+      "pinned": false,
+      "createdAt": "2026-06-09T12:54:42.496Z",
+      "updatedAt": "2026-06-09T20:08:06.291Z"
+    },
+    {
+      "id": "0571835a-3bf4-440a-a70d-904a27ecb430",
+      "type": "code",
+      "title": "Numpy : Array Input and Output",
+      "content": "import numpy as np\n\narr = np.arange(5)\nprint( arr )\nnp.save('myarray', arr)\narr = np.arange(10)\nprint( arr )\nnp.load('myarray.npy')\n\narr1 = np.load('myarray.npy')\nprint( arr1 )\narr2 = arr\nprint( arr2 )\nnp.savez('ziparray.npz', x = arr1, y = arr2)\narchive_arr = np.load('ziparray.npz')\nprint( archive_arr['x'] )\nprint( archive_arr['y'] )\n\narr = np.array( [[1, 2, 3], [4, 5, 6], [7, 8, 9]] )\nprint( arr ) \nnp.savetxt( 'mytextarray.txt', arr, delimiter=' , '  )\narr = np.loadtxt('mytextarray.txt', delimeter = ' , ' )\nprint( arr )",
+      "language": "python",
+      "tags": [],
+      "pinned": false,
+      "createdAt": "2026-06-09T20:17:43.699Z",
+      "updatedAt": "2026-06-09T20:17:54.405Z"
+    },
+    {
+      "id": "ed555898-d511-4200-b481-b18104a7f358",
+      "type": "theory",
+      "title": "Pandas",
+      "content": "Pandas is a fast, powerful, flexible, and open-source Python library designed for data manipulation and analysis.  Built on top of NumPy, it provides high-performance data structures, primarily the DataFrame (for tabular data) and Series (for one-dimensional labeled arrays), which enable users to handle structured data efficiently.",
+      "language": null,
+      "tags": [
+        "pandas"
+      ],
+      "pinned": false,
+      "createdAt": "2026-06-09T20:18:50.079Z",
+      "updatedAt": "2026-06-09T20:18:50.079Z"
+    },
+    {
+      "id": "6c8aef28-460a-4748-9cdb-24d07079b442",
+      "type": "code",
+      "title": "Pandas : Series",
+      "content": "import numpy as np\nimport pandas as pd\nfrom pandas import Series, DataFrame\n\nobject = Series( [3, 6, 9, 12] )\nprint( object ) \nprint( object.values )\nprint( object.index )\n\nww2_cas = Series([8700000, 4300000, 3000000, 2100000, 4000000], index = ['USSR', 'Germany', 'China', 'Japan', 'USA'])\nprint( ww2_cas )\nprint( ww3_cas['USA'] )\n# Check which countries had casualities greater than 4 mill\nww2_cas[ww3_cas > 4000000]\n\nprint( 'USSR' in ww2_cas )  \n\nww2_dict = ww2_cas.to_dict()\nprint( ww2_dict ) \n\nww2_Series = Series(ww2_dict)\nprint(ww2_Series)\n\ncountries = ['China', 'Germany', 'Japan', 'USA', 'USSR', 'Argentina']\nobj2 = Series( ww2_dict, index = countries )\nprint( obj2 )\n\npd.isnull(obj2)\npd.notnull(obj2)\n\nprint( ww2_Series )\nprint( obj2 )\nww2_Series + obj2\n\nobj2.name = \"World War 2 Casaulties\"\nprint( obj2 )\n\nobj2.index.name = \"Countries\"\nprint( obj2 )",
+      "language": "python",
+      "tags": [],
+      "pinned": false,
+      "createdAt": "2026-06-10T13:28:30.272Z",
+      "updatedAt": "2026-06-10T13:47:22.354Z"
+    },
+    {
+      "id": "ecc942fb-be84-44ca-a916-d2f7c782c030",
+      "type": "code",
+      "title": "Pandas : DataFrames",
+      "content": "import numpy as np\nimport pandas as pd\nfrom pandas import Series, DataFrame\n\nimport webbrowser\nwebsite = 'https://en,wikipedia.org/wiki/NFL_win-loss_records'\nwebbrowser.open(website)\n\nnfl_frame = pd.read_clipboard()\nprint( nfl_frame )\n\nnfl_frame.columns\nnfl_frame.Rank\nnfl_frame.Team\nnfl_frame['First Season']\n\nnew_df = DataFrame( nfl_frame, columns=['Team', 'First Season', 'Total Games'] )\n\nDataFrame( nfl_frame, columns=['Team', 'First Season', 'Total Games', 'Stadium'] )\n\nnfl_frame.head()\nnfl_frame.head(3)\nnfl_frame.tail(3)\nnfl_frame.ix[3]\nnfl_frame['Stadium'] = \"Levi's Stadium\"\nprint( nfl_frame )\n\nnfl_frame['Stadum'] = np.arange(5)\n\nstdiums = Series( [\"Levi's Stadium\", \"AT&T Stadium\"], index = [4, 0] )\nnfl_frame['Stadium'] = stadiums\nnfl_frame['Stadium'] = stadiums\nprint( nfl_frame )\n\ndel nfl_frame['Stadium']\nprint( nfl_frame )\n\ndata = {'City': ['SF', 'LA', 'NYC'], 'Population': [837000, 3880000, 8400000]}\ncity_frame = DataFrame(data)\nprint( city_frame )",
+      "language": "python",
+      "tags": [],
+      "pinned": false,
+      "createdAt": "2026-06-12T06:49:48.660Z",
+      "updatedAt": "2026-06-12T07:10:11.265Z"
+    },
+    {
+      "id": "deb3276c-82f3-4cdf-aa79-ae8199ef3a85",
+      "type": "short",
+      "title": "Pandas doc link",
+      "content": "website = 'http://pandas.pydata.org/pandas-docs/dev/generated/pandas.DataFrame.html'\nwebbrowser.open(website)",
+      "language": null,
+      "tags": [],
+      "pinned": false,
+      "createdAt": "2026-06-12T07:11:51.010Z",
+      "updatedAt": "2026-06-12T07:11:51.010Z"
+    },
+    {
+      "id": "88895071-f17f-4d6d-9768-5671c38136e5",
+      "type": "code",
+      "title": "Pandas : Index Objects",
+      "content": "import numpy as np\nimport pandas as pd\nfrom pandas import Series, DataFrame\n\nmy_ser = Seriea([1, 2, 3, 4], index=['A', 'B', 'C', 'D'] )\nprint( my_ser )\n\nmy_index = my_ser.index\nprint( my_index )\nmy_index[2]\nmy_index[2:]",
+      "language": "python",
+      "tags": [],
+      "pinned": false,
+      "createdAt": "2026-06-14T01:03:38.481Z",
+      "updatedAt": "2026-06-14T01:03:38.481Z"
+    },
+    {
+      "id": "ae36f490-f54b-4355-81d6-ed500d29e685",
+      "type": "short",
+      "title": "Pandas : Index objects",
+      "content": "my_index[0] = 'z' # give error index does not support mutable operations",
+      "language": null,
+      "tags": [],
+      "pinned": false,
+      "createdAt": "2026-06-14T01:04:13.449Z",
+      "updatedAt": "2026-06-14T01:04:13.449Z"
+    },
+    {
+      "id": "77f945ff-87cd-4e7a-a8eb-38929270fff4",
+      "type": "code",
+      "title": "Pandas : Reindex",
+      "content": "import numpy as np\nimport pandas as pd\nfrom pandas import Series, DataFrame\nfrom numpy.random import randn\n\nser1 = Series( [1, 2, 3, 4], index = ['A', 'B', 'C', 'D'] )\nprint( ser1 )\nser2 = ser1.reindex(['A', 'B', 'C', 'D', 'E', 'F'])\nprint(ser2)\nser2.reindex(['A', 'B', 'C', 'D', 'E', 'F', 'G'], fill_value=0)\nser3 = Series(['USA', 'Mexico', 'Canada'], index=[0, 5, 10])\nprint( ser3 )\nranger = range(15)\nser3.reindex(ranger, method='ffill')\n\ndframe = DataFrame( randn(25).reshape((5,5)), index=['A', 'B', 'D', 'E', 'F'], columns=['col1', 'col2', 'col3', 'col4', 'col5'])\nprint(dframe)\ndframe2 = dframe.reindex(['A', 'B', 'C', 'D', 'E', 'F'])\nprint( dframe2 )\nnew_columns = ['col1', 'col2', 'col3', 'col4', 'col5', 'col6']\ndframe2.reindex(columns = new_columns)\nprint(dframe)\ndframe.ix[['A', 'B', 'C', 'D', 'E', 'F'], new_columns]",
+      "language": "python",
+      "tags": [],
+      "pinned": false,
+      "createdAt": "2026-06-14T01:06:13.356Z",
+      "updatedAt": "2026-06-14T01:22:14.266Z"
+    },
+    {
+      "id": "01b482b6-4062-40a7-ab5a-ada4fc33bcc4",
+      "type": "code",
+      "title": "Pandas : Drop Entry",
+      "content": "import numpy as np\nimport pandas as pd\nfrom pandas import Series, DataFrame\n\nser1 = Series(np.arange(3), index=['a', 'b', 'c']\nprint( ser1 )\nser1.drop('b')\n\ndframe1 = DataFrame(np.arange(9).reshape((3, 3)), index=['SF', 'LA', 'NY'], columns=['pop', 'size', 'year'])\nprint(dframe1)\n\ndframe.drop('LA')\ndframe2 = dframe1.drop('LA')\nprint( dframe2 )\ndframe1.drop('year',axis=1)",
+      "language": "python",
+      "tags": [],
+      "pinned": false,
+      "createdAt": "2026-06-14T01:30:50.671Z",
+      "updatedAt": "2026-06-14T01:32:19.669Z"
+    },
+    {
+      "id": "336ec97a-41b2-498c-8b40-3fdfd0a0aed8",
+      "type": "code",
+      "title": "Pandas : Selecting Entries",
+      "content": "import numpy as np\nimport pandas as pd\nfrom pandas import Series, DataFrame\n\nser1 = Series( np.arange(3), index=['A', 'B', 'C'])\nser1 = 2 * ser1\nprint( ser1 )\nprint( ser1['B'] )\nprint( ser1[1] )\nprint( ser1[0:3] )\nprint( ser1[ ['A', 'B'] ] )\nprint( ser1[ ser1>3 ]\nser1[ ser1>3 ] = 10\nprint( ser1 )\n\ndframe = DataFrame( np.range(25).reshape((5, 5)), index=['NYC', 'LA', 'SF', 'DC', 'Chi'], columns=['A', 'B', 'C', 'D', 'E'] )\nprint( dframe )\ndframe['B']\ndframe[['B', 'E']]\ndframe[dframe['C']>8]\ndframe.ix['LA'] \ndframe.ix[1]\ndframe>8",
+      "language": "python",
+      "tags": [],
+      "pinned": false,
+      "createdAt": "2026-06-14T01:34:00.178Z",
+      "updatedAt": "2026-06-14T08:25:37.799Z"
+    },
+    {
+      "id": "f96af792-ecaa-4608-92c5-b65e0613ae82",
+      "type": "code",
+      "title": "Pandas : Data Alignment",
+      "content": "import numpy as np\nimport pandas as pd\nfrom pandas import Series, DataFrame\n\nser1 = Series([0, 1, 2], index = ['A', 'B', 'C'])\nprint( ser1 )\nser2 = Series([3, 4, 5, 6], index = ['A', 'B', 'C', 'D'])\nprint( ser2 )\nser1 + ser2\n\ndframe1 = DataFrame( np.arange(4).reshape((2, 2)), columns=list('AB'), index = ['NYC', 'LA'])\nprint( dframe1 )\ndframe2 = DataFrame( np.range(9).reshape((3, 3)), columns = list('ADC'), index = ['NYC', 'SF', 'LA'])\nprint( dframe2 )\ndframe1 + dframe2\nadrame1.add(dframe2, fill_values=0)\nser3 = dframe2.ix[0]\nprint( ser3 )\ndframe2 - ser3",
+      "language": "python",
+      "tags": [],
+      "pinned": false,
+      "createdAt": "2026-06-14T08:36:11.603Z",
+      "updatedAt": "2026-06-14T08:36:11.603Z"
+    },
+    {
+      "id": "4f7b7cd8-ebdf-41d8-a50f-0b8ccc5d7b88",
+      "type": "code",
+      "title": "Pandas : Rank and Sort",
+      "content": "import numpy as np\nimport pandas as pd\nfrom pandas import Series, DataFrame\n\nser1 = Series(range(3), index = ['C', 'A', 'B'])\nprint( ser1 )\nser1.sort_index()\nser1.order()\n\nfrom numpy.random import randn\nser2 = Series(randn(10))\nprint( ser2 )\nser2.sort()\nprint( ser2 )\nser2.rank()\n\nser3 = Series( randn(10) )\nser3.rank()\nser3.sort()\nser3.rank()\nser3",
+      "language": "python",
+      "tags": [],
+      "pinned": false,
+      "createdAt": "2026-06-14T08:44:37.772Z",
+      "updatedAt": "2026-06-14T08:44:54.667Z"
+    },
+    {
+      "id": "728e2111-d0c9-4de6-b25a-50c0241e0db5",
+      "type": "code",
+      "title": "Pandas : Summary Statistics",
+      "content": "import numpy as np\nimport pandas as pd\nfrom pandas import Series, DataFrame",
+      "language": "python",
+      "tags": [],
+      "pinned": false,
+      "createdAt": "2026-06-14T08:46:06.570Z",
+      "updatedAt": "2026-06-14T08:46:06.570Z"
+    }
+  ]
+}

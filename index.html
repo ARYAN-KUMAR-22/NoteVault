@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NoteVault — Your Personal Knowledge Base</title>
+  <meta name="description" content="A beautiful local-first notes app. Theory, code, and short notes displayed as a book — saved automatically to notes.json." />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=JetBrains+Mono:wght@400;500;600&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
+
+  <!-- Highlight.js -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Ambient background -->
+  <div class="bg-ambient" aria-hidden="true">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+  </div>
+
+  <!-- ===== SIDEBAR ===== -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <svg class="logo-icon" viewBox="0 0 32 32" fill="none">
+        <rect width="32" height="32" rx="9" fill="url(#lg1)"/>
+        <path d="M8 10h16M8 15.5h11M8 21h13" stroke="white" stroke-width="2.2" stroke-linecap="round"/>
+        <defs>
+          <linearGradient id="lg1" x1="0" y1="0" x2="32" y2="32">
+            <stop offset="0%" stop-color="#7c3aed"/>
+            <stop offset="100%" stop-color="#1d4ed8"/>
+          </linearGradient>
+        </defs>
+      </svg>
+      <span class="logo-text">NoteVault</span>
+    </div>
+
+    <!-- File status -->
+    <div class="sidebar-file-box" id="sidebarFileBox">
+      <div class="file-box-icon">📄</div>
+      <div class="file-box-info">
+        <span class="file-box-name" id="fileBoxName">notes.json</span>
+        <span class="file-box-sub" id="fileBoxSub">Click to link for saving</span>
+      </div>
+    </div>
+
+    <!-- New note button -->
+    <button class="sidebar-new-btn" id="newNoteBtn">
+      <span class="plus-icon">+</span> New Note
+    </button>
+
+    <!-- Search -->
+    <div class="sidebar-search">
+      <svg viewBox="0 0 20 20" fill="none" class="s-icon">
+        <circle cx="9" cy="9" r="5.5" stroke="currentColor" stroke-width="1.7"/>
+        <path d="M13 13L17 17" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+      </svg>
+      <input type="text" id="searchInput" class="s-input" placeholder="Search…" autocomplete="off" />
+      <button class="s-clear" id="searchClear" aria-label="Clear">✕</button>
+    </div>
+
+    <!-- Filter -->
+    <div class="sidebar-section-label">View</div>
+    <nav class="sidebar-nav">
+      <button class="nav-item active" data-filter="all" id="filterAll">
+        <span class="nav-icon">📚</span> All Notes
+        <span class="nav-count" id="countAll">0</span>
+      </button>
+      <button class="nav-item" data-filter="theory" id="filterTheory">
+        <span class="nav-icon">📖</span> Theory
+        <span class="nav-count" id="countTheory">0</span>
+      </button>
+      <button class="nav-item" data-filter="code" id="filterCode">
+        <span class="nav-icon">💻</span> Code
+        <span class="nav-count" id="countCode">0</span>
+      </button>
+      <button class="nav-item" data-filter="short" id="filterShort">
+        <span class="nav-icon">⚡</span> Short Notes
+        <span class="nav-count" id="countShort">0</span>
+      </button>
+      <button class="nav-item" data-filter="pinned" id="filterPinned">
+        <span class="nav-icon">📌</span> Pinned
+        <span class="nav-count" id="countPinned">0</span>
+      </button>
+    </nav>
+
+    <!-- Sort -->
+    <div class="sidebar-section-label">Sort by</div>
+    <select id="sortSelect" class="sidebar-sort">
+      <option value="sequence">Original Sequence</option>
+      <option value="newest">Newest First</option>
+      <option value="oldest">Oldest First</option>
+      <option value="title">Title A → Z</option>
+      <option value="updated">Last Updated</option>
+    </select>
+
+    <div class="sidebar-footer">
+      <button class="sidebar-action-btn" id="openFileBtn" title="Open / link notes.json for saving">
+        📂 Open File
+      </button>
+      <button class="sidebar-action-btn" id="exportBtn" title="Save As — pick a new notes.json location">
+        💾 Save As
+      </button>
+    </div>
+  </aside>
+
+  <!-- Sidebar toggle (mobile) -->
+  <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">☰</button>
+
+  <!-- ===== BOOK / DOCUMENT AREA ===== -->
+  <main class="book-area" id="bookArea">
+
+    <!-- Book header band -->
+    <div class="book-topbar">
+      <div class="book-topbar-title" id="bookTopTitle">All Notes</div>
+      <div class="book-topbar-right">
+        <span class="save-indicator" id="saveIndicator"></span>
+        <span class="note-seq-info" id="noteSeqInfo"></span>
+      </div>
+    </div>
+
+    <!-- The sequential document -->
+    <div class="book-document" id="bookDocument">
+      <!-- Notes rendered here sequentially -->
+    </div>
+
+    <!-- Empty state -->
+    <div class="book-empty" id="emptyState" style="display:none;">
+      <div class="empty-glyph">📓</div>
+      <h2>Your notebook is empty</h2>
+      <p>Click <strong>+ New Note</strong> in the sidebar to add your first note.<br/>Or open an existing <code>notes.json</code> file.</p>
+      <button class="btn-primary-lg" onclick="document.getElementById('newNoteBtn').click()">Write First Note</button>
+    </div>
+
+    <!-- No results -->
+    <div class="book-empty" id="noResultsState" style="display:none;">
+      <div class="empty-glyph">🔍</div>
+      <h2>No matching notes</h2>
+      <p>Try different keywords or clear the filter.</p>
+    </div>
+
+  </main>
+
+  <!-- ===== MODAL: Add / Edit ===== -->
+  <div class="modal-overlay" id="modalOverlay" role="dialog" aria-modal="true" aria-labelledby="modalTitle" style="display:none;">
+    <div class="modal" id="modalBox">
+
+      <div class="modal-header">
+        <h2 class="modal-title" id="modalTitle">New Note</h2>
+        <button class="modal-close" id="modalClose" aria-label="Close">✕</button>
+      </div>
+
+      <!-- Type pills -->
+      <div class="type-pill-row">
+        <button class="type-pill active" data-type="theory" id="typeTheory">📖 Theory</button>
+        <button class="type-pill" data-type="code" id="typeCode">💻 Code</button>
+        <button class="type-pill" data-type="short" id="typeShort">⚡ Short Note</button>
+      </div>
+
+      <!-- Form -->
+      <div class="modal-form">
+        <input type="text" id="noteTitle" class="form-input" placeholder="Title…" maxlength="120" autocomplete="off" />
+
+        <!-- Language row (code only) -->
+        <div id="langRow" style="display:none;">
+          <select id="langSelect" class="form-select">
+            <option value="python">Python</option>
+            <option value="javascript">JavaScript</option>
+            <option value="typescript">TypeScript</option>
+            <option value="html">HTML</option>
+            <option value="css">CSS</option>
+            <option value="java">Java</option>
+            <option value="cpp">C++</option>
+            <option value="c">C</option>
+            <option value="sql">SQL</option>
+            <option value="bash">Bash / Shell</option>
+            <option value="json">JSON</option>
+            <option value="yaml">YAML</option>
+            <option value="markdown">Markdown</option>
+            <option value="r">R</option>
+            <option value="go">Go</option>
+            <option value="rust">Rust</option>
+            <option value="plaintext">Plain Text</option>
+          </select>
+        </div>
+
+        <textarea id="noteContent" class="form-textarea" placeholder="Write here…" rows="12"></textarea>
+
+        <input type="text" id="noteTags" class="form-input" placeholder="Tags (comma-separated)" autocomplete="off" />
+
+        <label class="toggle-label" for="pinToggle">
+          <input type="checkbox" id="pinToggle" class="toggle-checkbox" />
+          <span class="toggle-track"><span class="toggle-thumb"></span></span>
+          <span>Pin this note</span>
+        </label>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn-ghost-sm" id="cancelBtn">Cancel</button>
+        <button class="btn-primary-sm" id="saveNoteBtn">Save Note</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== TOAST ===== -->
+  <div class="toast-container" id="toastContainer" aria-live="polite"></div>
+
+  <!-- ===== STATUS BAR ===== -->
+  <div class="status-bar" id="statusBar">
+    <span id="fileStatus">⚠️ Click "Open File" to link your notes.json</span>
+    <span id="lastSaved"></span>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
