@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>NoteVault — Your Personal Knowledge Base</title>
-  <meta name="description" content="A beautiful local-first notes app. Theory, code, and short notes displayed as a book — saved automatically to notes.json." />
+  <meta name="description" content="A beautiful local-first notes app with Markdown support. Theory, code, and short notes displayed as a book — saved automatically to notes.json." />
 
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -15,6 +15,9 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
 
+  <!-- Marked.js — Markdown rendering -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js"></script>
+
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -23,6 +26,7 @@
   <div class="bg-ambient" aria-hidden="true">
     <div class="orb orb-1"></div>
     <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
   </div>
 
   <!-- ===== SIDEBAR ===== -->
@@ -39,6 +43,7 @@
         </defs>
       </svg>
       <span class="logo-text">NoteVault</span>
+      <span class="logo-version">v2</span>
     </div>
 
     <!-- File status -->
@@ -120,14 +125,41 @@
     <div class="book-topbar">
       <div class="book-topbar-title" id="bookTopTitle">All Notes</div>
       <div class="book-topbar-right">
-        <span class="save-indicator" id="saveIndicator"></span>
+        <div class="save-state no-file" id="saveState">
+          <span class="save-dot"></span>
+          <span id="saveText">No file linked</span>
+        </div>
         <span class="note-seq-info" id="noteSeqInfo"></span>
       </div>
     </div>
 
-    <!-- The sequential document -->
-    <div class="book-document" id="bookDocument">
-      <!-- Notes rendered here sequentially -->
+    <!-- Book View (normal list) -->
+    <div id="bookView">
+      <div class="book-document" id="bookDocument">
+        <!-- Notes rendered here sequentially -->
+      </div>
+    </div>
+
+    <!-- Focus View (single note reader) -->
+    <div class="focus-view" id="focusView" style="display:none;">
+      <div class="focus-topbar">
+        <button class="focus-back-btn" id="focusBackBtn">← Back to notes</button>
+        <div class="focus-actions-bar">
+          <button class="focus-action-btn" id="focusEditBtn">✏️ Edit</button>
+          <button class="focus-action-btn" id="focusPinBtn">📌 Pin</button>
+          <button class="focus-action-btn del" id="focusDeleteBtn">🗑️ Delete</button>
+        </div>
+      </div>
+      <div class="focus-scroll">
+        <div class="focus-content" id="focusContent">
+          <!-- Single note rendered here -->
+        </div>
+        <div class="focus-nav">
+          <button class="focus-nav-btn" id="focusPrevBtn">← Previous</button>
+          <span class="focus-position" id="focusPosition">1 of 1</span>
+          <button class="focus-nav-btn" id="focusNextBtn">Next →</button>
+        </div>
+      </div>
     </div>
 
     <!-- Empty state -->
@@ -136,6 +168,11 @@
       <h2>Your notebook is empty</h2>
       <p>Click <strong>+ New Note</strong> in the sidebar to add your first note.<br/>Or open an existing <code>notes.json</code> file.</p>
       <button class="btn-primary-lg" onclick="document.getElementById('newNoteBtn').click()">Write First Note</button>
+      <div class="empty-shortcuts">
+        <div class="empty-shortcut"><kbd>Ctrl</kbd>+<kbd>N</kbd> New note</div>
+        <div class="empty-shortcut"><kbd>Ctrl</kbd>+<kbd>K</kbd> Command palette</div>
+        <div class="empty-shortcut"><kbd>Ctrl</kbd>+<kbd>F</kbd> Search</div>
+      </div>
     </div>
 
     <!-- No results -->
@@ -147,63 +184,97 @@
 
   </main>
 
-  <!-- ===== MODAL: Add / Edit ===== -->
-  <div class="modal-overlay" id="modalOverlay" role="dialog" aria-modal="true" aria-labelledby="modalTitle" style="display:none;">
-    <div class="modal" id="modalBox">
+  <!-- ===== EDITOR PANEL (replaces modal) ===== -->
+  <div class="editor-backdrop" id="editorBackdrop"></div>
+  <div class="editor-panel" id="editorPanel" role="dialog" aria-modal="true">
+    <div class="editor-header">
+      <h2 class="editor-title" id="editorTitle">New Note</h2>
+      <button class="editor-close" id="editorClose" aria-label="Close">✕</button>
+    </div>
 
-      <div class="modal-header">
-        <h2 class="modal-title" id="modalTitle">New Note</h2>
-        <button class="modal-close" id="modalClose" aria-label="Close">✕</button>
+    <!-- Type pills -->
+    <div class="editor-type-row">
+      <button class="type-pill active" data-type="theory" id="typeTheory">📖 Theory</button>
+      <button class="type-pill" data-type="code" id="typeCode">💻 Code</button>
+      <button class="type-pill" data-type="short" id="typeShort">⚡ Short</button>
+    </div>
+
+    <!-- Editor body -->
+    <div class="editor-body">
+      <input type="text" id="noteTitle" class="form-input" placeholder="Title…" maxlength="120" autocomplete="off" />
+
+      <!-- Language row (code only) -->
+      <div id="langRow" style="display:none;">
+        <select id="langSelect" class="form-select">
+          <option value="python">Python</option>
+          <option value="javascript">JavaScript</option>
+          <option value="typescript">TypeScript</option>
+          <option value="html">HTML</option>
+          <option value="css">CSS</option>
+          <option value="java">Java</option>
+          <option value="cpp">C++</option>
+          <option value="c">C</option>
+          <option value="sql">SQL</option>
+          <option value="bash">Bash / Shell</option>
+          <option value="json">JSON</option>
+          <option value="yaml">YAML</option>
+          <option value="markdown">Markdown</option>
+          <option value="r">R</option>
+          <option value="go">Go</option>
+          <option value="rust">Rust</option>
+          <option value="plaintext">Plain Text</option>
+        </select>
       </div>
 
-      <!-- Type pills -->
-      <div class="type-pill-row">
-        <button class="type-pill active" data-type="theory" id="typeTheory">📖 Theory</button>
-        <button class="type-pill" data-type="code" id="typeCode">💻 Code</button>
-        <button class="type-pill" data-type="short" id="typeShort">⚡ Short Note</button>
+      <!-- Write / Preview tabs (theory only) -->
+      <div class="editor-tabs" id="editorTabs">
+        <button class="editor-tab active" data-tab="write" id="tabWrite">✍️ Write</button>
+        <button class="editor-tab" data-tab="preview" id="tabPreview">👁️ Preview</button>
       </div>
 
-      <!-- Form -->
-      <div class="modal-form">
-        <input type="text" id="noteTitle" class="form-input" placeholder="Title…" maxlength="120" autocomplete="off" />
+      <textarea id="noteContent" class="form-textarea" placeholder="Write here…" rows="12"></textarea>
 
-        <!-- Language row (code only) -->
-        <div id="langRow" style="display:none;">
-          <select id="langSelect" class="form-select">
-            <option value="python">Python</option>
-            <option value="javascript">JavaScript</option>
-            <option value="typescript">TypeScript</option>
-            <option value="html">HTML</option>
-            <option value="css">CSS</option>
-            <option value="java">Java</option>
-            <option value="cpp">C++</option>
-            <option value="c">C</option>
-            <option value="sql">SQL</option>
-            <option value="bash">Bash / Shell</option>
-            <option value="json">JSON</option>
-            <option value="yaml">YAML</option>
-            <option value="markdown">Markdown</option>
-            <option value="r">R</option>
-            <option value="go">Go</option>
-            <option value="rust">Rust</option>
-            <option value="plaintext">Plain Text</option>
-          </select>
+      <!-- Markdown preview pane -->
+      <div class="editor-preview" id="editorPreview" style="display:none;"></div>
+
+      <!-- Markdown hint (theory only) -->
+      <div class="md-hint" id="mdHint">
+        <svg viewBox="0 0 16 16" fill="currentColor"><path d="M14.85 3H1.15C.52 3 0 3.52 0 4.15v7.7C0 12.48.52 13 1.15 13h13.7c.63 0 1.15-.52 1.15-1.15v-7.7C16 3.52 15.48 3 14.85 3zM9 11H7V8L5.5 9.92 4 8v3H2V5h2l1.5 2L7 5h2v6zm2.99.5L9.5 8H11V5h2v3h1.5l-2.51 3.5z"/></svg>
+        Markdown supported — **bold**, *italic*, `code`, lists, headings, and more
+      </div>
+
+      <input type="text" id="noteTags" class="form-input" placeholder="Tags (comma-separated)" autocomplete="off" />
+
+      <label class="toggle-label" for="pinToggle">
+        <input type="checkbox" id="pinToggle" class="toggle-checkbox" />
+        <span class="toggle-track"><span class="toggle-thumb"></span></span>
+        <span>Pin this note</span>
+      </label>
+    </div>
+
+    <div class="editor-footer">
+      <button class="btn-ghost-sm" id="cancelBtn">Cancel</button>
+      <button class="btn-primary-sm" id="saveNoteBtn">Save Note</button>
+    </div>
+  </div>
+
+  <!-- ===== COMMAND PALETTE ===== -->
+  <div class="cmd-overlay" id="cmdOverlay" style="display:none;">
+    <div class="cmd-palette" id="cmdPalette">
+      <div class="cmd-input-wrap">
+        <svg class="cmd-input-icon" viewBox="0 0 20 20" fill="none">
+          <circle cx="9" cy="9" r="5.5" stroke="currentColor" stroke-width="1.7"/>
+          <path d="M13 13L17 17" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+        </svg>
+        <input type="text" class="cmd-input" id="cmdInput" placeholder="Search notes or type a command…" autocomplete="off" />
+      </div>
+      <div class="cmd-results" id="cmdResults"></div>
+      <div class="cmd-footer">
+        <div class="cmd-footer-keys">
+          <span><kbd>↑</kbd><kbd>↓</kbd> Navigate</span>
+          <span><kbd>↵</kbd> Open</span>
+          <span><kbd>Esc</kbd> Close</span>
         </div>
-
-        <textarea id="noteContent" class="form-textarea" placeholder="Write here…" rows="12"></textarea>
-
-        <input type="text" id="noteTags" class="form-input" placeholder="Tags (comma-separated)" autocomplete="off" />
-
-        <label class="toggle-label" for="pinToggle">
-          <input type="checkbox" id="pinToggle" class="toggle-checkbox" />
-          <span class="toggle-track"><span class="toggle-thumb"></span></span>
-          <span>Pin this note</span>
-        </label>
-      </div>
-
-      <div class="modal-footer">
-        <button class="btn-ghost-sm" id="cancelBtn">Cancel</button>
-        <button class="btn-primary-sm" id="saveNoteBtn">Save Note</button>
       </div>
     </div>
   </div>
@@ -213,8 +284,15 @@
 
   <!-- ===== STATUS BAR ===== -->
   <div class="status-bar" id="statusBar">
-    <span id="fileStatus">⚠️ Click "Open File" to link your notes.json</span>
-    <span id="lastSaved"></span>
+    <div class="status-left">
+      <span id="fileStatus">⚠️ Click "Open File" to link your notes.json</span>
+      <span class="status-filter" id="statusFilter">All</span>
+    </div>
+    <div class="status-right">
+      <span id="statusCount"></span>
+      <span id="lastSaved"></span>
+      <span class="status-shortcut"><kbd>Ctrl</kbd>+<kbd>K</kbd> Command Palette</span>
+    </div>
   </div>
 
   <script src="app.js"></script>
